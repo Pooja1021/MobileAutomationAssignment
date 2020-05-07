@@ -1,5 +1,7 @@
 package pageObjects;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import io.appium.java_client.android.AndroidDriver;
@@ -20,16 +22,33 @@ import io.appium.java_client.android.AndroidElement;
 	//Methods to input email/phone and navigate to password screen
 		
 		public void EnterUserID(String userIDtext) throws InterruptedException {
-			
-			WebDriverWait wait= new WebDriverWait(driver, 5);
-			wait.until(ExpectedConditions.presenceOfElementLocated(userID));
-			driver.findElement(userID).sendKeys(userIDtext);
-		}
+					
+			try {
+				Thread.sleep(3000);
+				WebDriverWait wait = new WebDriverWait(driver, 5);
+				wait.until(ExpectedConditions.presenceOfElementLocated(userID));
+				try {
+				driver.findElement(userID).sendKeys(userIDtext);
+				} catch (WebDriverException e) {
+				System.out.println("An Exception Case!");
+				}
+				} catch (TimeoutException toe) {
+				System.out.println("WebDriver couldn’t locate the element");
+				}
+			}
+
 		
 		public LoginPasswordScreen clickContinueButton() {
-			driver.findElement(continueButton).click();
-			return new LoginPasswordScreen(driver);
 			
-	}
+			try {				
+				driver.findElement(continueButton).click();
+				} 
+			 catch (TimeoutException toe) {
+				System.out.println("WebDriver couldn’t locate the element");
+				}
+			
+			return new LoginPasswordScreen(driver);
+		}	
+
 
 }

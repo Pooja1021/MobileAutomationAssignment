@@ -1,65 +1,116 @@
 package resources;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-
-import android.Base;
+import com.aventstack.extentreports.MediaEntityBuilder;
+import com.aventstack.extentreports.Status;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 
 public class Listeners implements ITestListener{
+	
+	AndroidDriver<AndroidElement>  driver = null;
 
 	@Override
 	public void onTestStart(ITestResult result) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Test Started :: " + result.getName().toString().trim());
+		ExtentTestManager.startTest(result.getMethod().getMethodName());
+		//ITestListener.super.onTestStart(result);	
 	}
 
 	@Override
 	public void onTestSuccess(ITestResult result) {
-		// TODO Auto-generated method stub
-		
-		
+		System.out.println("Test Success :: " + result.getName().toString().trim());
+		ExtentTestManager.getTest().log(Status.PASS, "Test passed");
+		//ITestListener.super.onTestSuccess(result);	
 	}
 
 	@Override
 	public void onTestFailure(ITestResult result) {
-		// TODO Auto-generated method stub
-		//screenshot 
-		String s=result.getName();
+		String targetLocation = null;
+		String testClassName = result.getInstanceName().trim();
+		String testMethodName = result.getName().toString().trim();
+		Date date = new Date();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+		String strDate = format.format(date);
+		String screenshotName = testMethodName + "_"+ strDate;
+		String fileSeperator = System.getProperty("file.separator");
+		String reportsPath = System.getProperty("user.dir") + fileSeperator + "TestReport" + fileSeperator + "screenshots";
 		try {
-		Base.getScreenshot(s);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			File file = new File(reportsPath + fileSeperator + testClassName);
+					if(!file.exists()) {
+						Files.createDirectory(file.toPath());
+						if(file.exists()){							
+							System.out.println("Directory :: "+ file.getAbsolutePath()+" is created successfully. ");
+							ExtentTestManager.getTest().log(Status.INFO,"Directory: " + file.getAbsolutePath() + " is created!");
+						}else {
+							System.out.println("Failed to create directory :: "+ file.getAbsolutePath());
+							ExtentTestManager.getTest().log(Status.INFO,"Failed to create directory: " + file.getAbsolutePath());
+						}
+				}
+			File scrfile=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+		
+			targetLocation = reportsPath + fileSeperator + testClassName + fileSeperator + screenshotName;
+			FileUtils.copyFile(scrfile,new File(targetLocation+".png"));
+			
 		}
-		
-		
+		catch(FileNotFoundException e) {
+					System.out.println("File Not Found Exception occurred while taking screenshot to target location"+ e);
+					ExtentTestManager.getTest().log(Status.INFO,"File Not Found Exception occurred while taking screenshot to target location :: " + e.getMessage());
+				}
+		catch(Exception e) {
+					System.out.println("Exception Occurred in onTestFailure() of Listener :: " + e.getMessage());
+					ExtentTestManager.getTest().log(Status.INFO,"Exception Occurred in onTestFailure() of Listener" + e.getCause());
+				}
+		// attach screenshots to report
+				try {
+					ExtentTestManager.getTest().fail("Screenshot",
+							MediaEntityBuilder.createScreenCaptureFromPath(targetLocation).build());
+				} catch (IOException e) {
+					ExtentTestManager.getTest().log(Status.INFO,"An exception occured while taking screenshot " + e.getCause());
+				}
+				ExtentTestManager.getTest().log(Status.FAIL, "Test Failed");
+		//ITestListener.super.onTestFailure(result);
+			
 	}
 
 	@Override
 	public void onTestSkipped(ITestResult result) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Test Skipped :: " + result.getName().toString().trim());
+		ExtentTestManager.getTest().log(Status.SKIP, "Test Skipped");
+		//ITestListener.super.onTestSkipped(result);		
 	}
 
 	@Override
 	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("onTestFailedButWithinSuccessPercentage :: " + ITestResult.SUCCESS_PERCENTAGE_FAILURE);		
 	}
 
 	@Override
 	public void onStart(ITestContext context) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("This is onStart method PassedTests ::" + context.getPassedTests());
+		System.out.println("This is onStart method FailedTests ::" + context.getFailedTests());
+		//ITestListener.super.onStart(context);		
 	}
 
 	@Override
 	public void onFinish(ITestContext context) {
-		// TODO Auto-generated method stub
+		System.out.println("This is onFinish method PassedTests ::" + context.getPassedTests());
+		System.out.println("This is onFinish method FailedTests ::" + context.getFailedTests());
+		ExtentTestManager.endTest();
 		
+		ExtentManager.getInstance().flush();
+		//ITestListener.super.onFinish(context);		
 	}
 	
 	

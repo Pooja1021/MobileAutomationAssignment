@@ -1,13 +1,13 @@
 package android;
 
-
-import static org.testng.Assert.assertTrue;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-import org.testng.annotations.BeforeClass;
+
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+
 import android.Base;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
@@ -19,11 +19,15 @@ import pageObjects.LoginWelcomeScreen;
 public class LoginTest extends Base {
 	//This test is for successful Login functionality	
 	
-	@Test	@BeforeClass
-	public void testLogin() throws IOException, InterruptedException 
+	protected HomeScreen home;
+	
+	@BeforeMethod
+	public void testLogin() throws IOException, InterruptedException
 	{
 		service=startServer();
 		AndroidDriver<AndroidElement> driver= capabilities("AmazonShoppping");
+		
+		SoftAssert softAssert = new SoftAssert();
 		FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+"\\src\\main\\java\\android\\global.properties");
 		Properties prop = new Properties();
 		prop.load(fis);
@@ -46,10 +50,10 @@ public class LoginTest extends Base {
 		loginpassword.EnterPassword(passwordText);
 		loginpassword.clickLoginButton();
 		
-		HomeScreen home = new HomeScreen(driver);
+		home = new HomeScreen(driver);
+		System.out.println(home.getHomePageText());
+		softAssert.assertTrue(home.getHomePageText().contains(homePageText),"User was not able to login successfully");
 		
-		assertTrue(home.getHomePageText()
-                .contains(homePageText),"User was not able to login successfully");	
 	}
 
 	@BeforeTest

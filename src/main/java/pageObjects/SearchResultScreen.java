@@ -1,5 +1,7 @@
 package pageObjects;
 
+import org.openqa.selenium.TimeoutException;
+
 import android.Utilities;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
@@ -16,12 +18,15 @@ public class SearchResultScreen {
 //used scrolling gesture to scroll and select product	
 	public ProductDetailsScreen selectProduct() {
 		Utilities u=new Utilities(driver);
-	    u.scrollToText("Habit Brewed Vinegar, 500ml (Pack of 2)"); 
-	    driver.findElementByXPath("//android.widget.TextView[@text='Habit Brewed Vinegar, 500ml (Pack of 2)']").click();
-	    return new ProductDetailsScreen(driver);
-	
+	    u.scrollToText("NourishVitals Apple Cider Vinegar with Mother Vinegar - 250 ml"); 
+	    try {
+	    	driver.findElementByXPath("//android.widget.TextView[@text='NourishVitals Apple Cider Vinegar with Mother Vinegar - 250 ml']").click();
+			} 
+		 catch (TimeoutException toe) {
+			System.out.println("WebDriver couldn’t locate the element");
+			}
+	    
+	    return new ProductDetailsScreen(driver);	
 	}	
-			
-	//assertNotNull();
 
 }

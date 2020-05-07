@@ -24,8 +24,11 @@ public class LandingScreen {
 //Already a customer Sign-in Button selection method
 	
 	public LoginWelcomeScreen clickExistingCustomerSignInOption() {
-		existingCustomerSignInButton.click();
-		return new LoginWelcomeScreen(driver);
+	
+			existingCustomerSignInButton.click();
+		
+			return new LoginWelcomeScreen(driver);
+		
 	}
 
 }

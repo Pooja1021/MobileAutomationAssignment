@@ -3,12 +3,12 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="android.LoginTest">
+      <class name="android.SampleTest">
         <methods>
           <include name="testLogin"/>
           <include name="killAllNodes"/>
         </methods>
-      </class> <!-- android.LoginTest -->
+      </class> <!-- android.SampleTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
