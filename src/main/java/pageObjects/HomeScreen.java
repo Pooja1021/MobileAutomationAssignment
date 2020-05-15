@@ -2,10 +2,10 @@ package pageObjects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import io.appium.java_client.TouchAction;
 import static io.appium.java_client.touch.TapOptions.tapOptions;
@@ -24,20 +24,16 @@ public class HomeScreen {
 	}
 
 	public void EnterSearchText(String searchText) throws InterruptedException {
-		try {
-			Thread.sleep(3000);
-			WebDriverWait wait = new WebDriverWait(driver, 7);
+			WebDriverWait wait = new WebDriverWait(driver, 10);
 			wait.until(ExpectedConditions.presenceOfElementLocated(searchBox));
 			try {
-				WebElement tapoption1= driver.findElement(searchBox); TouchAction touch = new TouchAction(driver);
+				WebElement tapoption1= driver.findElement(searchBox); 
+				TouchAction touch = new TouchAction(driver);
 				touch.tap(tapOptions().withElement(element(tapoption1))).perform();
 				driver.findElement(searchBox).sendKeys(searchText);
 				} 
-			catch (WebDriverException e) {
-			System.out.println("An Exception Case!");
-			}
-			} catch (TimeoutException toe) {
-			System.out.println("WebDriver couldn’t locate the element");
+			catch (TimeoutException toe) {
+				Assert.fail("Cannot locate the Search Textbox");
 			}
 	}
 		
@@ -54,7 +50,7 @@ public class HomeScreen {
 				touch.tap(tapOptions().withElement(element(tapoption2))).perform();
 				} 
 			 catch (TimeoutException toe) {
-			System.out.println("WebDriver couldn’t locate the element");
+				 Assert.fail("Cannot find the suggested text option");
 			 	}
 		
 		return new SearchResultScreen(driver);

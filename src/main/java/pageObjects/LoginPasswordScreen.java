@@ -2,9 +2,9 @@ package pageObjects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
@@ -23,13 +23,10 @@ import io.appium.java_client.android.AndroidElement;
 			try {
 				WebDriverWait wait = new WebDriverWait(driver, 5);
 				wait.until(ExpectedConditions.presenceOfElementLocated(password));
-				try {
 				driver.findElement(password).sendKeys(passwordText);
-				} catch (WebDriverException e) {
-				System.out.println("An Exception Case!");
-				}
-				} catch (TimeoutException toe) {
-				System.out.println("WebDriver couldn’t locate the element");
+				} 
+			catch (TimeoutException toe) {
+				Assert.fail("Cannot locate the Password Textbox");
 				}
 			}
 		
@@ -38,7 +35,7 @@ import io.appium.java_client.android.AndroidElement;
 				driver.findElement(loginButton).click();
 				} 
 			 catch (TimeoutException toe) {
-				System.out.println("WebDriver couldn’t locate the element");
+				 Assert.fail("Cannot locate the Login button");
 				}			
 			return new HomeScreen(driver);
 	}

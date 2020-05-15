@@ -1,6 +1,7 @@
 package pageObjects;
 
 import org.openqa.selenium.TimeoutException;
+import org.testng.Assert;
 
 import android.Utilities;
 import io.appium.java_client.android.AndroidDriver;
@@ -16,14 +17,14 @@ public class SearchResultScreen {
 	
 
 //used scrolling gesture to scroll and select product	
-	public ProductDetailsScreen selectProduct() {
+	public ProductDetailsScreen selectProduct(String productName) {
 		Utilities u=new Utilities(driver);
-	    u.scrollToText("NourishVitals Apple Cider Vinegar with Mother Vinegar - 250 ml"); 
+	    u.scrollToText(productName); 
 	    try {
 	    	driver.findElementByXPath("//android.widget.TextView[@text='NourishVitals Apple Cider Vinegar with Mother Vinegar - 250 ml']").click();
 			} 
 		 catch (TimeoutException toe) {
-			System.out.println("WebDriver couldn’t locate the element");
+			 Assert.fail("Cannot locate the Product Name");
 			}
 	    
 	    return new ProductDetailsScreen(driver);	

@@ -3,7 +3,6 @@ package android;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.asserts.SoftAssert;
@@ -37,8 +36,8 @@ public class LoginTest extends Base {
 		String passwordText = (String) prop.get("Password");
 		String homePageText = (String) prop.get("HomePageText");
 		
+		
 		LandingScreen landing = new LandingScreen(driver);
-						
 		landing.clickExistingCustomerSignInOption();
 		
 		LoginWelcomeScreen loginuser = new LoginWelcomeScreen(driver);
@@ -51,18 +50,14 @@ public class LoginTest extends Base {
 		loginpassword.clickLoginButton();
 		
 		home = new HomeScreen(driver);
-		System.out.println(home.getHomePageText());
-		softAssert.assertTrue(home.getHomePageText().contains(homePageText),"User was not able to login successfully");
 		
+		softAssert.assertTrue(home.getHomePageText().contains(homePageText),"User was not able to login successfully");	
 	}
 
 	@BeforeTest
 	public void killAllNodes() throws IOException, InterruptedException
-	{
-	
+	{	
 		Runtime.getRuntime().exec("taskkill /F /IM node.exe");
-		Thread.sleep(3000);
-		
 	}
 	
 }

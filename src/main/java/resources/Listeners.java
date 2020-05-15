@@ -23,14 +23,12 @@ public class Listeners implements ITestListener{
 
 	@Override
 	public void onTestStart(ITestResult result) {
-		System.out.println("Test Started :: " + result.getName().toString().trim());
 		ExtentTestManager.startTest(result.getMethod().getMethodName());
 		//ITestListener.super.onTestStart(result);	
 	}
 
 	@Override
 	public void onTestSuccess(ITestResult result) {
-		System.out.println("Test Success :: " + result.getName().toString().trim());
 		ExtentTestManager.getTest().log(Status.PASS, "Test passed");
 		//ITestListener.super.onTestSuccess(result);	
 	}
@@ -51,10 +49,8 @@ public class Listeners implements ITestListener{
 					if(!file.exists()) {
 						Files.createDirectory(file.toPath());
 						if(file.exists()){							
-							System.out.println("Directory :: "+ file.getAbsolutePath()+" is created successfully. ");
 							ExtentTestManager.getTest().log(Status.INFO,"Directory: " + file.getAbsolutePath() + " is created!");
 						}else {
-							System.out.println("Failed to create directory :: "+ file.getAbsolutePath());
 							ExtentTestManager.getTest().log(Status.INFO,"Failed to create directory: " + file.getAbsolutePath());
 						}
 				}
@@ -65,51 +61,46 @@ public class Listeners implements ITestListener{
 			
 		}
 		catch(FileNotFoundException e) {
-					System.out.println("File Not Found Exception occurred while taking screenshot to target location"+ e);
-					ExtentTestManager.getTest().log(Status.INFO,"File Not Found Exception occurred while taking screenshot to target location :: " + e.getMessage());
+			ExtentTestManager.getTest().log(Status.INFO,"File Not Found Exception occurred while taking screenshot to target location :: " + e.getMessage());
 				}
 		catch(Exception e) {
-					System.out.println("Exception Occurred in onTestFailure() of Listener :: " + e.getMessage());
-					ExtentTestManager.getTest().log(Status.INFO,"Exception Occurred in onTestFailure() of Listener" + e.getCause());
+			ExtentTestManager.getTest().log(Status.INFO,"Exception Occurred in onTestFailure() of Listener " + e.getCause());
 				}
 		// attach screenshots to report
-				try {
-					ExtentTestManager.getTest().fail("Screenshot",
-							MediaEntityBuilder.createScreenCaptureFromPath(targetLocation).build());
-				} catch (IOException e) {
-					ExtentTestManager.getTest().log(Status.INFO,"An exception occured while taking screenshot " + e.getCause());
+		try {
+			ExtentTestManager.getTest().fail("Screenshot",
+			MediaEntityBuilder.createScreenCaptureFromPath(targetLocation).build());
+				} 
+		catch (IOException e) {
+			ExtentTestManager.getTest().log(Status.INFO,"An exception occured while taking screenshot " + e.getCause());
 				}
-				ExtentTestManager.getTest().log(Status.FAIL, "Test Failed");
+			ExtentTestManager.getTest().log(Status.FAIL, "Test Failed");
 		//ITestListener.super.onTestFailure(result);
 			
 	}
 
 	@Override
 	public void onTestSkipped(ITestResult result) {
-		System.out.println("Test Skipped :: " + result.getName().toString().trim());
 		ExtentTestManager.getTest().log(Status.SKIP, "Test Skipped");
 		//ITestListener.super.onTestSkipped(result);		
 	}
 
 	@Override
 	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-		System.out.println("onTestFailedButWithinSuccessPercentage :: " + ITestResult.SUCCESS_PERCENTAGE_FAILURE);		
+		ExtentTestManager.getTest().log(Status.INFO, "TestFailedButWithinSuccessPercentage :: " + ITestResult.SUCCESS_PERCENTAGE_FAILURE);		
 	}
 
 	@Override
 	public void onStart(ITestContext context) {
-		System.out.println("This is onStart method PassedTests ::" + context.getPassedTests());
-		System.out.println("This is onStart method FailedTests ::" + context.getFailedTests());
-		//ITestListener.super.onStart(context);		
 	}
 
 	@Override
 	public void onFinish(ITestContext context) {
-		System.out.println("This is onFinish method PassedTests ::" + context.getPassedTests());
-		System.out.println("This is onFinish method FailedTests ::" + context.getFailedTests());
+		ExtentTestManager.getTest().log(Status.INFO, "This is onFinish method Passed Tests ::" + context.getPassedTests());
+		ExtentTestManager.getTest().log(Status.INFO, "This is onFinish method Failed Tests ::" + context.getFailedTests());
 		ExtentTestManager.endTest();
 		
-		ExtentManager.getInstance().flush();
+		ExtentReporterNG.getInstance().flush();
 		//ITestListener.super.onFinish(context);		
 	}
 	

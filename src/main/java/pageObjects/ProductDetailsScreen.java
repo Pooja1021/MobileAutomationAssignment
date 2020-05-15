@@ -2,6 +2,8 @@ package pageObjects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
+import org.testng.Assert;
+
 import android.Utilities;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
@@ -33,16 +35,15 @@ public class ProductDetailsScreen {
 	    	driver.findElementByClassName("android.widget.Button").click();
 			} 
 		 catch (TimeoutException toe) {
-			System.out.println("WebDriver couldn’t locate the element");
+			 Assert.fail("Cannot locate Add to Cart button");
 			}    
     }
 	
 	public CheckoutScreen clickCartIcon() throws InterruptedException{
-			Thread.sleep(3000);
 			try {
 			driver.findElementByAccessibilityId("Cart").click();
 			} catch (TimeoutException toe) {
-			System.out.println("WebDriver couldn’t locate the element");
+				Assert.fail("Cannot locate the Cart Icon");
 			}
         return new CheckoutScreen(driver);
     }

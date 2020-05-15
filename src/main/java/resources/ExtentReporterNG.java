@@ -1,11 +1,13 @@
 package resources;
 
 import java.io.File;
+import org.testng.Reporter;
+import org.testng.IReporter;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
-public class ExtentManager {
+public class ExtentReporterNG implements IReporter {
 	private static ExtentReports extent;
 	private static String reportFileName = "Automation_Report" +".html";
 	private static String fileSeperator = System.getProperty("file.separator");
@@ -38,14 +40,14 @@ public class ExtentManager {
 		File testDirectory = new File(path);
 		if (!testDirectory.exists()) {
 			if (testDirectory.mkdir()) {
-				System.out.println("Directory: " + path + " is created!");
+				Reporter.log("Directory: " + path + " is created!");
 				return reportFileLocation;
 			} else {
-				System.out.println("Failed to create directory: " + path);
+				Reporter.log("Failed to create directory: " + path);
 				return System.getProperty("user.dir");
 			}
 		} else {
-			System.out.println("Directory already exists: " + path);
+			Reporter.log("Directory already exists: " + path);
 		}
 		return reportFileLocation;
 	}

@@ -12,7 +12,6 @@ public class Utilities {
 	{
 		this.driver=driver;
 	}
-
 	
 	public void scrollToText(String text)
 	{
