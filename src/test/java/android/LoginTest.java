@@ -1,8 +1,6 @@
 package android;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Properties;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.asserts.SoftAssert;
@@ -27,16 +25,11 @@ public class LoginTest extends Base {
 		AndroidDriver<AndroidElement> driver= capabilities("AmazonShoppping");
 		
 		SoftAssert softAssert = new SoftAssert();
-		FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+"\\src\\main\\java\\android\\global.properties");
-		Properties prop = new Properties();
-		prop.load(fis);
-		
-		//Reading values from Global.properties file
-		String userIDtext= (String) prop.get("UserID");
-		String passwordText = (String) prop.get("Password");
-		String homePageText = (String) prop.get("HomePageText");
-		
-		
+		Utilities u =new Utilities(driver);
+		String userIDtext = u.getTextfromProperty("UserID");
+		String passwordText = u.getTextfromProperty("Password");
+		String homePageText = u.getTextfromProperty("HomePageText");
+				
 		LandingScreen landing = new LandingScreen(driver);
 		landing.clickExistingCustomerSignInOption();
 		

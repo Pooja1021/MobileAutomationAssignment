@@ -47,5 +47,4 @@ import io.appium.java_client.android.AndroidElement;
 			return new LoginPasswordScreen(driver);
 		}	
 
-
 }

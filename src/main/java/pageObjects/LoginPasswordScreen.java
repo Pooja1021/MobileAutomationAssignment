@@ -21,7 +21,7 @@ import io.appium.java_client.android.AndroidElement;
 		
 		public void EnterPassword(String passwordText) {
 			try {
-				WebDriverWait wait = new WebDriverWait(driver, 5);
+				WebDriverWait wait = new WebDriverWait(driver, 10);
 				wait.until(ExpectedConditions.presenceOfElementLocated(password));
 				driver.findElement(password).sendKeys(passwordText);
 				} 

@@ -1,6 +1,6 @@
 package pageObjects;
 
-import org.openqa.selenium.By;
+import java.io.IOException;
 import org.openqa.selenium.TimeoutException;
 import org.testng.Assert;
 
@@ -11,26 +11,28 @@ import io.appium.java_client.android.AndroidElement;
 public class ProductDetailsScreen {
 	
 	private AndroidDriver<AndroidElement> driver;
-	private By productName = By.xpath("//android.view.View[@text='NourishVitals Apple Cider Vinegar with Mother Vinegar - 250 ml']");
-	private By productPrice = By.xpath("//android.widget.EditText[@text='rupees 179']");
-	
+	Utilities u=new Utilities(driver);
+		
 	public ProductDetailsScreen(AndroidDriver<AndroidElement> driver) {
 		this.driver=driver;
 	}
 
-	public String getProductName(){
-        String name = driver.findElement(productName).getText();
+	public String getProductName() throws IOException{
+	
+		String productdetailsXpath= u.getTextfromProperty("ProductDetailsXpath");
+		String name = driver.findElementByXPath(productdetailsXpath).getText();
         return name;
     }
 	
-	public String getProductPrice(){
-        String price = driver.findElement(productPrice).getText();
+	public String getProductPrice() throws IOException{
+		String priceXpath= u.getTextfromProperty("ProductPrice");
+        String price = driver.findElementByXPath(priceXpath).getText();
         return price;
     }
 	
 	public void clickAddToCartButton(){
-		Utilities u=new Utilities(driver);
-	    u.scrollToText("Add to Cart");
+		Utilities newU =new Utilities(driver);
+		newU.scrollToText("Add to Cart");
 	    try {			
 	    	driver.findElementByClassName("android.widget.Button").click();
 			} 

@@ -1,11 +1,9 @@
 package android;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.URL;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import io.appium.java_client.android.AndroidDriver;
@@ -48,15 +46,13 @@ public static boolean checkIfServerIsRunnning(int port) {
 	
 	public static AndroidDriver<AndroidElement> capabilities(String appName) throws IOException, InterruptedException 
 	{
-		FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+"\\src\\main\\java\\android\\global.properties");
-		Properties prop = new Properties();
-		prop.load(fis);
+				
+		Utilities u =new Utilities(driver);
 				
 		File appDirectory = new File("src");
-		File app = new File(appDirectory, (String) prop.get(appName));
-		String device=(String) prop.get("device");
+		File app = new File(appDirectory,u.getTextfromProperty(appName));
 		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, device);
+		capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, u.getTextfromProperty("device"));
 		capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME,"uiautomator2");
 	    capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT,14);
 		capabilities.setCapability(MobileCapabilityType.APP, app.getAbsolutePath());
